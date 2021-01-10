@@ -113,6 +113,8 @@
 import numpy as np
 import tensorflow as tf
 from tensorflow import keras
+import os
+
 def get_model():
     # Create a simple model.
     inputs = keras.Input(shape=(66177,))
@@ -127,11 +129,11 @@ def get_model():
 model = get_model()
 
 # Train the model.
-test_input = np.array([np.load("adinSpec.npy").flatten()])
+test_input = np.array([np.load('_training/input'+'/'+file).flatten() for file in os.listdir('_training/input') if file.split('.')[-1] == 'npy'])
 print(test_input.shape)
-test_target = np.array([np.load("artinSpec.npy").flatten()])
+test_target = np.array([np.load('_training/output'+'/'+file).flatten() for file in os.listdir('_training/output') if file.split('.')[-1] == 'npy'])
 print(test_target.shape)
-model.fit(test_input, test_target,10,1000)
+model.fit(test_input, test_target,10,100)
 
 # Calling `save('my_model')` creates a SavedModel folder `my_model`.
 model.save("my_model")

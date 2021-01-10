@@ -13,11 +13,10 @@ def audio_to_spectrogram(filename, output):
     window = np.hanning(window_size)
     hop_length = 64
     stft  = librosa.core.spectrum.stft(y, n_fft=window_size, hop_length=hop_length, window=window)
-    out = 2 * np.abs(stft) / np.sum(window)
+    stft = stft.real
     stft = stft - stft.min()
+    out = 2 * np.abs(stft) / np.sum(window)
 
-    if output not in os.listdir():
-        os.mkdir(output)
     np.save(output+'.npy', stft)
 
     spectrogram_to_image(out, output)
@@ -35,3 +34,12 @@ def spectrogram_to_image(spec, name):
     img -= img.min()
     img = np.flip(img, 0)
     Image.fromarray(img).convert('RGB').save(name+'.png')
+
+if __name__ == '__main__':
+    for zone in ['input', 'output']:
+        for file in os.listdir('training/'+zone):
+            if file.split('.')[-1] == 'wav':
+                audio_to_spectrogram('training/'+zone+'/'+file, '_training/'+zone+'/'+'.'.join(file.split('.')[:-1]))
+    for file in os.listdir('use'):
+        if file.split('.')[-1] == 'wav':
+            audio_to_spectrogram('use/'+file, '_use/'+'.'.join(file.split('.')[:-1]))
