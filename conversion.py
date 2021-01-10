@@ -9,12 +9,13 @@ def audio_to_spectrogram(filename, output):
     length = 2**13
     y = y[:length]
 
-    window_size = 1024
+    window_size = 512
     window = np.hanning(window_size)
     hop_length = 64
     stft  = librosa.core.spectrum.stft(y, n_fft=window_size, hop_length=hop_length, window=window)
     stft = stft.real
     stft = stft - stft.min()
+    stft /= stft.max()
     out = 2 * np.abs(stft) / np.sum(window)
 
     np.save(output+'.npy', stft)

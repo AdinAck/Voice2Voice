@@ -1,6 +1,9 @@
-from conversion import audio_to_spectrogram
-audio_to_spectrogram('adin.wav', 'adinSpec')
-audio_to_spectrogram('adin2.wav', 'adinSpec2')
-audio_to_spectrogram('adin3.wav', 'adinSpec3')
-audio_to_spectrogram('adin4.wav', 'adinSpec4')
-audio_to_spectrogram('artin.wav', 'artinSpec')
+import numpy as np
+from tensorflow import keras
+model = keras.models.load_model("my_model")
+print(model.get_weights()[0][100])
+print(model.get_weights()[1][100])
+for i in model.get_weights()[1]:
+    print(i)
+#print(model.get_weights())
+#
