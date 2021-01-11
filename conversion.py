@@ -17,7 +17,7 @@ def audio_to_spectrogram(filename, output):
     if not os.path.isdir(output):
         os.mkdir(output)
 
-    for i in range(max(1,len(y)//length-1)):
+    for i in range(len(y)//length):
         stft  = librosa.core.spectrum.stft(y[i*length:(i+1)*length], n_fft=window_size, hop_length=hop_length, window=window)
         stft = stft.real
         stft = stft - stft.min()
