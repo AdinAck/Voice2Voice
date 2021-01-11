@@ -18,7 +18,7 @@ def get_model():
     model = keras.Model(inputs, outputs)
     opt = keras.optimizers.Adam(lr=0.00005)
     model.compile(optimizer=opt, loss="mean_squared_error")
-    print(model.get_weights())
+    # print(model.get_weights())
     return model
 
 
