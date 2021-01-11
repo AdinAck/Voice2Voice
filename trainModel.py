@@ -2,12 +2,12 @@ import numpy as np
 import tensorflow as tf
 from tensorflow import keras
 import os
-from keras.backend.tensorflow_backend import set_session
-
-config = tf.ConfigProto()
-config.gpu_options.allow_growth = True
-sess = tf.Session(config=config)
-set_session(sess)
+# from keras.backend.tensorflow_backend import set_session
+#
+# config = tf.ConfigProto()
+# config.gpu_options.allow_growth = True
+# sess = tf.Session(config=config)
+# set_session(sess)
 
 def get_model():
     # Create a simple model.
@@ -26,11 +26,22 @@ def get_model():
 model = keras.models.load_model("my_model")
 
 # Train the model.
-test_input = np.array([np.load('_training/input'+'/'+file).flatten() for file in os.listdir('_training/input') if file.split('.')[-1] == 'npy'])
-print(test_input)
-test_target = np.array([np.load('_training/output'+'/'+file).flatten() for file in os.listdir('_training/output') if file.split('.')[-1] == 'npy'])
-print(test_target.shape)
-model.fit(test_input, test_target,4,5000)
+inputData = []
+for inputDataset in os.listdir('_training/input'):
+    for segment in os.listdir(f'_training/input/{inputDataset}'):
+        inputData.append(np.load(f'_training/input/{inputDataset}/{segment}').flatten())
+
+inputData = np.asarray(inputData)
+
+targetData = []
+for targetDataset in os.listdir('_training/output'):
+    for segment in os.listdir(f'_training/output/{targetDataset}'):
+        targetData.append(np.load(f'_training/output/{targetDataset}/{segment}').flatten())
+
+targetData = np.asarray(targetData)
+
+print(inputData.shape, targetData.shape)
+model.fit(inputData, targetData,4,100)
 
 print("DO NOT CLOSE -- MODEL SAVING!!!")
 
