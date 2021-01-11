@@ -20,7 +20,10 @@ for dir in os.listdir('_use'):
             test_input = np.array([np.load(f'_use/{dir}/{file}').flatten()])
             #test_input = np.array([np.ones((257*129))+50])
             #print(test_input.shape)
-            out = reconstructed_model.predict(test_input)*160
+            out = reconstructed_model.predict(test_input)
+            print(np.average(out))
+            out -= out.min()
+            out *= 160/out.max()
             out.shape = 257, 129
             tmp.append(out)
 

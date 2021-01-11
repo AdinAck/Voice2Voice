@@ -37,8 +37,8 @@ def spectrogram_to_audio(arr, output, hop_length, sr):
 
 def spectrogram_to_image(spec, name):
     img = spec.copy()
-    img *= 255/img.max()
     img -= img.min()
+    img *= 255/img.max()
     img = np.flip(img, 0)
     Image.fromarray(img).convert('RGB').save(name+'.png')
 
@@ -72,4 +72,5 @@ if __name__ == '__main__':
             audio_to_spectrogram('use/'+file, '_use/'+'.'.join(file.split('.')[:-1]))
             progress.update(1)
 
+    print()
     print('Done.')

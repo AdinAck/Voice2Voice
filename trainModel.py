@@ -12,32 +12,36 @@ import os
 def get_model():
     # Create a simple model.
     inputs = keras.Input(shape=(33153,))
-    x1 = keras.layers.Dense(1000, activation="sigmoid", name="dense_1")(inputs)
+    x1 = keras.layers.Dense(1000, activation="relu", name="dense_1")(inputs)
     # x2 = keras.layers.Dense(40000, activation="relu", name ="dense_2")(x1)
     outputs = keras.layers.Dense(33153,activation="sigmoid")(x1)
     model = keras.Model(inputs, outputs)
-    opt = keras.optimizers.Adam(learning_rate=0.000005)
+    opt = keras.optimizers.Adam(lr=0.00005)
     model.compile(optimizer=opt, loss="mean_squared_error")
     print(model.get_weights())
     return model
 
 
-#model = get_model()
-model = keras.models.load_model("my_model")
+model = get_model()
+# model = keras.models.load_model("my_model")
 
 # Train the model.
 inputData = []
 targetData = []
 for inputDataset, targetDataset in zip(os.listdir('_training/input'), os.listdir('_training/output')):
     for inSegment, outSegment in zip(os.listdir(f'_training/input/{inputDataset}'), os.listdir(f'_training/output/{targetDataset}')):
-        inputData.append(np.load(f'_training/input/{inputDataset}/{inSegment}').flatten())
-        targetData.append(np.load(f'_training/output/{targetDataset}/{outSegment}').flatten())
+        tmp = np.load(f'_training/input/{inputDataset}/{inSegment}').flatten()
+        tmp *= tmp/tmp.max()
+        inputData.append(tmp)
+        tmp = np.load(f'_training/output/{targetDataset}/{outSegment}').flatten()
+        tmp *= tmp/tmp.max()
+        targetData.append(tmp)
 
 inputData = np.asarray(inputData)
 targetData = np.asarray(targetData)
 
 print(inputData.shape, targetData.shape)
-model.fit(inputData, targetData,len(inputData),100)
+model.fit(inputData, targetData,len(inputData),100, use_multiprocessing=True)
 
 print("DO NOT CLOSE -- MODEL SAVING!!!")
 
