@@ -3,28 +3,30 @@ import numpy as np
 import tensorflow as tf
 from tensorflow import keras
 from conversion import spectrogram_to_audio, spectrogram_to_image
-from tqdm import tqdm
+from tqdm import trange
 
-from keras.backend.tensorflow_backend import set_session
-config = tf.ConfigProto()
-config.gpu_options.allow_growth = True
-sess = tf.Session(config=config)
-set_session(sess)
+# from keras.backend.tensorflow_backend import set_session
+# config = tf.ConfigProto()
+# config.gpu_options.allow_growth = True
+# sess = tf.Session(config=config)
+# set_session(sess)
 
 reconstructed_model = keras.models.load_model("my_model")
 
+sliceSize = 4
+
 for dir in os.listdir('_use'):
     tmp = []
-    for file in tqdm(os.listdir(f'_use/{dir}'), unit='spec'):
+    for file in os.listdir(f'_use/{dir}'):
         if file.split('.')[-1] == 'npy':
             test_input = np.load(f'_use/{dir}/{file}')
             #test_input = np.array([np.ones((257*129))+50])
             #print(test_input.shape)
-            for i in range(test_input.shape[1]):
-                out = reconstructed_model.predict(np.array([test_input[:,i].flatten()]))
+            for i in trange(test_input.shape[1]//sliceSize, unit='spec'):
+                out = reconstructed_model.predict(np.array([test_input[:,i*sliceSize:(i+1)*sliceSize].flatten()]))
                 out -= out.min()
                 out *= 160/out.max()
-                out.shape = 257, 1
+                out.shape = 257, sliceSize
                 tmp.append(out)
 
     print(len(tmp))
