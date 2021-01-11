@@ -9,24 +9,21 @@ from tqdm import tqdm
 
 def audio_to_spectrogram(filename, output):
     y, sr = librosa.load(filename)
-    length = 2**13
     window_size = 512
     window = np.hanning(window_size)
     hop_length = 64
 
     if not os.path.isdir(output):
         os.mkdir(output)
+    stft  = librosa.core.spectrum.stft(y, n_fft=window_size, hop_length=hop_length, window=window)
+    stft = stft.real
+    stft = stft - stft.min()
+    stft /= stft.max()
+    out = 2 * np.abs(stft) / np.sum(window)
 
-    for i in range(len(y)//length):
-        stft  = librosa.core.spectrum.stft(y[i*length:(i+1)*length], n_fft=window_size, hop_length=hop_length, window=window)
-        stft = stft.real
-        stft = stft - stft.min()
-        stft /= stft.max()
-        out = 2 * np.abs(stft) / np.sum(window)
+    np.save(f'{output}/{0}.npy', stft)
 
-        np.save(f'{output}/{i}.npy', stft)
-
-        # spectrogram_to_image(out, f'{output}/{i}')
+    #spectrogram_to_image(out, f'{output}/{0}')
 
     return hop_length, sr
 
