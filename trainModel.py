@@ -27,21 +27,17 @@ model = keras.models.load_model("my_model")
 
 # Train the model.
 inputData = []
-for inputDataset in os.listdir('_training/input'):
-    for segment in os.listdir(f'_training/input/{inputDataset}'):
-        inputData.append(np.load(f'_training/input/{inputDataset}/{segment}').flatten())
+targetData = []
+for inputDataset, targetDataset in zip(os.listdir('_training/input'), os.listdir('_training/output')):
+    for inSegment, outSegment in zip(os.listdir(f'_training/input/{inputDataset}'), os.listdir(f'_training/output/{targetDataset}')):
+        inputData.append(np.load(f'_training/input/{inputDataset}/{inSegment}').flatten())
+        targetData.append(np.load(f'_training/output/{targetDataset}/{outSegment}').flatten())
 
 inputData = np.asarray(inputData)
-
-targetData = []
-for targetDataset in os.listdir('_training/output'):
-    for segment in os.listdir(f'_training/output/{targetDataset}'):
-        targetData.append(np.load(f'_training/output/{targetDataset}/{segment}').flatten())
-
 targetData = np.asarray(targetData)
 
 print(inputData.shape, targetData.shape)
-model.fit(inputData, targetData,4,100)
+model.fit(inputData, targetData,len(inputData),100)
 
 print("DO NOT CLOSE -- MODEL SAVING!!!")
 

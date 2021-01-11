@@ -61,7 +61,7 @@ if __name__ == '__main__':
     useFiles = os.listdir('use')
 
     print('Converting...\n')
-    progress = tqdm(total=len(trainFiles)+len(useFiles), unit='spec')
+    progress = tqdm(total=len(trainFiles)+len(useFiles), unit=' sgmnt')
 
     for file in trainFiles:
         if file.split('.')[-1] == 'wav':
@@ -71,3 +71,5 @@ if __name__ == '__main__':
         if file.split('.')[-1] == 'wav':
             audio_to_spectrogram('use/'+file, '_use/'+'.'.join(file.split('.')[:-1]))
             progress.update(1)
+
+    print('Done.')
