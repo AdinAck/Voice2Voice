@@ -18,8 +18,8 @@ def audio_to_spectrogram(filename, output):
     stft = librosa.core.spectrum.stft(y, n_fft=window_size, hop_length=hop_length, window=window)
     stft = stft.real
     # stft = np.abs(stft)
-    stft = stft - stft.min()
-    stft /= stft.max()
+    # stft = stft - stft.min()
+    # stft /= stft.max()
 
     np.save(f'{output}/{0}.npy', stft)
 

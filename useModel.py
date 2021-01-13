@@ -12,8 +12,9 @@ from tqdm import trange
 # set_session(sess)
 
 reconstructed_model = keras.models.load_model("my_model")
+print(reconstructed_model.get_weights())
 
-sliceSize = 512
+sliceSize = 2
 
 for dir in os.listdir('_use'):
     tmp = []
@@ -24,8 +25,8 @@ for dir in os.listdir('_use'):
             #print(test_input.shape)
             for i in trange(test_input.shape[1]//sliceSize, unit='spec'):
                 out = reconstructed_model.predict(np.array([test_input[:,i*sliceSize:(i+1)*sliceSize].flatten()]))
-                out -= out.min()
-                out *= 160/out.max()
+                # out -= out.min()
+                # out *= 160/out.max()
                 out.shape = 257, sliceSize
                 tmp.append(out)
 

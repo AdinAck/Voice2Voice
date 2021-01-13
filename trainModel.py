@@ -1,6 +1,7 @@
 import numpy as np
 import tensorflow as tf
 from tensorflow import keras
+import wandb
 from conversion import spectrogram_to_image
 import os
 
@@ -13,18 +14,21 @@ import os
 
 def get_model(sliceSize):
     # Create a simple model.
-    inputs = keras.Input(shape=(257*sliceSize,))
-    x1 = keras.layers.Dense(1000, activation="relu", name="dense_1")(inputs)
-    x2 = keras.layers.Dense(1000, activation="relu", name ="dense_2")(x1)
-    outputs = keras.layers.Dense(257*sliceSize,activation="sigmoid")(x2)
-    model = keras.Model(inputs, outputs)
-    opt = keras.optimizers.Adam(lr=0.001)
+    inputs1 = keras.Input(shape=(257*sliceSize,))
+    inputs2 = keras.layers.BatchNormalization(momentum=0.8)(inputs1)
+    x1 = keras.layers.Dense(1500, activation=tf.nn.leaky_relu, name="dense_1", kernel_initializer="random_uniform")(inputs2)
+    x2 = keras.layers.Dense(2500, activation=tf.nn.leaky_relu, name="dense_2", kernel_initializer="random_uniform")(x1)
+    x3 = keras.layers.Dense(1500, activation=tf.nn.leaky_relu, name="dense_3", kernel_initializer="random_uniform")(x2)
+    outputs = keras.layers.Dense(257*sliceSize,activation=None)(x3)
+    model = keras.Model(inputs1, outputs)
+    opt = keras.optimizers.Adam(lr=0.000147)
     model.compile(optimizer=opt, loss="mean_squared_error")
     # print(model.get_weights())
     return model
 
+wandb.init(project='Voice2Voice', name='Voice2Voice')
 
-sliceSize = 512
+sliceSize = 256
 
 # Train the model.
 inputData = []
@@ -68,8 +72,13 @@ print(inputData.shape, targetData.shape)
 model = get_model(sliceSize)
 # model = keras.models.load_model("my_model")
 
-for _ in range(100):
-    model.fit(inputData, targetData,len(inputData),1000, use_multiprocessing=True)
+try:
+    for epoch in range(100000):
+        # print(model.get_weights())
+        model.fit(inputData, targetData,4,1000, use_multiprocessing=True)
+        # loss = model.train_on_batch(inputData, targetData)
+        # wandb.log({"Loss": loss})
+except KeyboardInterrupt:
     print("DO NOT CLOSE -- MODEL SAVING!!!")
     model.save("my_model")
 
