@@ -13,7 +13,7 @@ from tqdm import trange
 
 reconstructed_model = keras.models.load_model("my_model")
 
-sliceSize = 4
+sliceSize = 512
 
 for dir in os.listdir('_use'):
     tmp = []
@@ -29,7 +29,6 @@ for dir in os.listdir('_use'):
                 out.shape = 257, sliceSize
                 tmp.append(out)
 
-    print(len(tmp))
     final = tmp[0]
     for arr in tmp[1:]:
         final = np.concatenate((final, arr), axis=1)

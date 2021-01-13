@@ -15,15 +15,15 @@ def audio_to_spectrogram(filename, output):
 
     if not os.path.isdir(output):
         os.mkdir(output)
-    stft  = librosa.core.spectrum.stft(y, n_fft=window_size, hop_length=hop_length, window=window)
+    stft = librosa.core.spectrum.stft(y, n_fft=window_size, hop_length=hop_length, window=window)
     stft = stft.real
+    # stft = np.abs(stft)
     stft = stft - stft.min()
     stft /= stft.max()
-    out = 2 * np.abs(stft) / np.sum(window)
 
     np.save(f'{output}/{0}.npy', stft)
 
-    #spectrogram_to_image(out, f'{output}/{0}')
+    spectrogram_to_image(stft, f'{output}/{0}')
 
     return hop_length, sr
 
