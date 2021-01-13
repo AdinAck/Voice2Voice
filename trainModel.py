@@ -1,7 +1,7 @@
 import numpy as np
 import tensorflow as tf
 from tensorflow import keras
-import wandb
+#import wandb
 from conversion import spectrogram_to_image
 import os
 
@@ -26,9 +26,9 @@ def get_model(sliceSize):
     # print(model.get_weights())
     return model
 
-wandb.init(project='Voice2Voice', name='Voice2Voice')
+#wandb.init(project='Voice2Voice', name='Voice2Voice')
 
-sliceSize = 256
+sliceSize = 64
 
 # Train the model.
 inputData = []
@@ -73,11 +73,10 @@ model = get_model(sliceSize)
 # model = keras.models.load_model("my_model")
 
 try:
-    for epoch in range(100000):
-        # print(model.get_weights())
-        model.fit(inputData, targetData,4,1000, use_multiprocessing=True)
-        # loss = model.train_on_batch(inputData, targetData)
-        # wandb.log({"Loss": loss})
+    # print(model.get_weights())
+    model.fit(inputData, targetData,4,10000, use_multiprocessing=True)
+    # loss = model.train_on_batch(inputData, targetData)
+    # wandb.log({"Loss": loss})
 except KeyboardInterrupt:
     print("DO NOT CLOSE -- MODEL SAVING!!!")
     model.save("my_model")

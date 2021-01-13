@@ -14,7 +14,7 @@ from tqdm import trange
 reconstructed_model = keras.models.load_model("my_model")
 print(reconstructed_model.get_weights())
 
-sliceSize = 2
+sliceSize = 256
 
 for dir in os.listdir('_use'):
     tmp = []
