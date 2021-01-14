@@ -53,12 +53,15 @@ The loss function. [Tensorflow Documentation](https://www.tensorflow.org/api_doc
 The batch size. [Tensorflow Documentation](https://www.tensorflow.org/api_docs/python/tf/keras/Sequential#fit)
 
 # Usage
-`Voice2Voice.py [-l | --load_data] [-t | --train] [-p | --predict]`
+`Voice2Voice.py [-l | --load_data] [-f | --flush_data] [-t | --train] [-p | --predict]`
 
 ### load_data
 Load audio files in `training` and `use` folders to be usable by the model.
 
 This will also create the `training` and `use` folders if they are not present.
+
+### flush_data
+Delete all converted data.
 
 ### train
 Create a new model to be trained, or continue training an existing model (dependent on the `modelName` attribute in `config.ini`).
