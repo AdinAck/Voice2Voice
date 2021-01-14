@@ -19,10 +19,10 @@ Create a folder named *tools* under C:\\. Drag the *cuda* folder from the cuDNN 
 
 ### Appending %PATH%
 Add the following paths to the PATH system environment variable:
- - C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v11.0\\bin
- - C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v11.0\\extras\\CUPTI\\lib64
- - C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v11.0\\include
- - C:\\tools\\cuda\\bin
+ - `C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v11.0\\bin`
+ - `C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v11.0\\extras\\CUPTI\\lib64`
+ - `C:\\Program Files\\NVIDIA GPU Computing Toolkit\\CUDA\\v11.0\\include`
+ - `C:\\tools\\cuda\\bin`
 
 # Configuration
 In the `config.ini` file, there are attributes to be changed for configuring the model.
