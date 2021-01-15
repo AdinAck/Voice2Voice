@@ -18,7 +18,7 @@ def get_model(sliceSize, hiddenLayers, lossFunc, learningRate):
     for i, size in enumerate(hiddenLayers):
         layers.append(keras.layers.Dense(size, activation=tf.nn.leaky_relu, name=f"dense_{i+1}", kernel_initializer="random_uniform")(layers[i]))
 
-    outputs = keras.layers.Dense(257*sliceSize,activation=None)(layers[-1])
+    outputs = keras.layers.Dense(257*sliceSize,activation="sigmoid")(layers[-1])
     model = keras.Model(inputs1, outputs)
     opt = keras.optimizers.Adam(lr=learningRate)
     model.compile(optimizer=opt, loss=lossFunc)
@@ -29,6 +29,8 @@ def get_model(sliceSize, hiddenLayers, lossFunc, learningRate):
     return model
 
 def Main():
+    global verbose
+
     config = ConfigParser()
     config.read('config.ini')
 

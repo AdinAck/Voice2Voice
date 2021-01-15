@@ -12,9 +12,10 @@ def Main():
     config = ConfigParser()
     config.read('config.ini')
 
+    modelName = config['MISC']['modelName']
     verbose = eval(config['MISC']['verbose'])
 
-    reconstructed_model = keras.models.load_model("my_model")
+    reconstructed_model = keras.models.load_model(modelName)
     if verbose:
         print(reconstructed_model.get_weights())
 
@@ -30,12 +31,16 @@ def Main():
                     print(test_input.shape)
                 for i in trange(test_input.shape[1]//sliceSize, unit='spec'):
                     out = reconstructed_model.predict(np.array([test_input[:,i*sliceSize:(i+1)*sliceSize].flatten()]))
+                    out -= .5
+                    out *= 10
                     out.shape = 257, sliceSize
                     tmp.append(out)
 
         final = tmp[0]
         for arr in tmp[1:]:
             final = np.concatenate((final, arr), axis=1)
+        print(final)
+        print(np.average(final))
 
         if verbose:
             spectrogram_to_image(final, f'output/{dir}Converted')

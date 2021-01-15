@@ -5,6 +5,9 @@ import librosa
 from scipy.io.wavfile import write as waveWrite
 from tqdm import tqdm
 
+def sigmoid(x):
+    return 1/(1+np.exp(-x))
+
 def audio_to_spectrogram(filename, output):
     y, sr = librosa.load(filename)
     window_size = 512
@@ -16,8 +19,9 @@ def audio_to_spectrogram(filename, output):
     stft = librosa.core.spectrum.stft(y, n_fft=window_size, hop_length=hop_length, window=window)
     stft = stft.real
     # stft = np.abs(stft)
-    # stft = stft - stft.min()
+    # stft -= stft.min()
     # stft /= stft.max()
+    stft = np.vectorize(sigmoid)(stft)
 
     np.save(f'{output}/{0}.npy', stft)
 
