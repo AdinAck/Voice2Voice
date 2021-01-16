@@ -60,7 +60,7 @@ Running `load_data` for the first time creates the `training` and `use` folders.
 Place person A's audio recordings into the folder.
 
 #### Training/Output
-Place person B's audio recordings in an order corresponding to person A's audio recordings. (Recommended naming example: "helloJohn.wav"
+Place person B's audio recordings in an order corresponding to person A's audio recordings. (Recommended naming example: "helloJohn.wav")
 
 #### Use Folder
 Place files to be used by model to perform voice conversion. (Suggest using training files as preliminary testing of model)
