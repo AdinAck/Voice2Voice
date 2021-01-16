@@ -18,9 +18,6 @@ def audio_to_spectrogram(filename, output):
         os.mkdir(output)
     stft = librosa.core.spectrum.stft(y, n_fft=window_size, hop_length=hop_length, window=window)
     stft = stft.real
-    # stft = np.abs(stft)
-    # stft -= stft.min()
-    # stft /= stft.max()
     stft = np.vectorize(sigmoid)(stft)
 
     np.save(f'{output}/{0}.npy', stft)

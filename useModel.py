@@ -39,9 +39,8 @@ def Main():
         final = tmp[0]
         for arr in tmp[1:]:
             final = np.concatenate((final, arr), axis=1)
-        print(final)
-        print(np.average(final))
 
         if verbose:
             spectrogram_to_image(final, f'output/{dir}Converted')
+            np.save(f'output/{dir}Converted.npy', final)
         spectrogram_to_audio(final, f'output/{dir}Converted'+'.wav', 64, 22050)
