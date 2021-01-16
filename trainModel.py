@@ -16,7 +16,7 @@ def get_model(sliceSize, hiddenLayers, lossFunc, learningRate):
     layers = [inputs2]
 
     for i, size in enumerate(hiddenLayers):
-        layers.append(keras.layers.Dense(size, activation=tf.nn.leaky_relu, name=f"dense_{i+1}", kernel_initializer="random_uniform")(layers[i]))
+        layers.append(keras.layers.Dense(size, activation=tf.nn.leaky_relu, name=f"dense_{i+1}", kernel_initializer="random_normal")(layers[i]))
 
     outputs = keras.layers.Dense(257*sliceSize,activation="sigmoid")(layers[-1])
     model = keras.Model(inputs1, outputs)

@@ -44,4 +44,5 @@ def Main():
 
         if verbose:
             spectrogram_to_image(final, f'output/{dir}Converted')
+            np.save(f'output/{dir}Converted.npy', final)
         spectrogram_to_audio(final, f'output/{dir}Converted'+'.wav', 64, 22050)
